@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visa Status Checker</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Visa Status Checker</h1>
+    <button id="startCheck">Start Visa Status Check</button>
+    <div id="status"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#startCheck').click(function() {
+                $('#status').text('Starting visa status check...');
+                $.post('/start_check', function(data) {
+                    $('#status').text(data.message);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

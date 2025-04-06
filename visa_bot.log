@@ -1,0 +1,8 @@
+2025-04-06 16:01:44,547 - INFO - Starting visa bot...
+2025-04-06 16:01:45,164 - INFO - CAPTCHA submitted, ID: 79296232785
+2025-04-06 16:02:05,659 - INFO - CAPTCHA solved: 03AFcWeA6oYdI9io47XzY7M-dAms6G-y7J9wYmDeZwafCoENTgh-DybPSnyVEtPNhLuslhE25rPkU-q_q3bAOnp7ifmqgxvp2QkWsjEKwa83q0KRz9Ur0naJAhsdC5bdLIjbT6apBhIV8tQdwRvsUulCfzi3DFTYZDV9S2duM1hhJQ5gDbJu8BqFqZv0MxtzrJeOPyOQZvmem7Xo1CYQU6-6ik043QCs9aJG8ushW1NZ2_DWrSiDoE1rpMtaEY7hOvn10eP5rUnZ4asnCzdQ3Hr1U9n6KY7rrbFwXLLjB0aUDdru3bAQ4j5tjPbejK3icf-WaS1CkNQkATjz6QSY563t8X3xTnw-C5jcCKK1Aev8urnPuI5tnUBcXoIJdTaocJ31EgsyY21cdRFl1DQK9Iru5uWj5RIuuOIcOCMZbbxB-dTFpqQRCvz_mJ_qN9V8ejHO_aX0rNg6sQdLingbQd2ZUfLf8GaLzyhTNZ8llikAYkrKRAmMI934FxsmMUUbf2_soYnM0GKbj-0sdTfzkdA7MElablxkHJ0ztor0ntOPNvOSFFia0mvDDsDonBnQhB-mcvQURqxGN0ADwZEpQganlCxYaKxAE4S2q56CtZHJHR9m9Z-8iVXpo9P8R_g569jMKOUymoAMLOWuQCID1FLoY6p5mvD3Kuh1sRiN3D8SbPrmrnneF_rUgFYAYCoDOWRQCTIu-dMvYcw46ohgSouAU-qUv8-tDHy0upExl6lH7MZJrusJ8-mEagyUlaSTj1oMYP785axIghs1PoIVjzeVpiHwHZ1TfCg-l4f0wZBnYAUJVgajpVOkci4_NeGkq1TIRroDrJg5XSZkaqh2hZHXTjCxR4BD4l8nUXaLT3NIQVwNx3y0K0s4kSSxIzAspOQDjgsJU9aWZE-mutpSNUUAp9KXzbL6U5JJoKLUNeg9MMpVVxjNw4eXsTg-Ob66CWhixwx9RQh7IordadwrGC_3HJTVYVQZhm0Q
+2025-04-06 16:02:05,668 - INFO - ====== WebDriver manager ======
+2025-04-06 16:02:07,075 - INFO - There is no [win32] chromedriver "latest" for browser google-chrome "134.0.6998" in cache
+2025-04-06 16:02:07,075 - INFO - Get LATEST chromedriver version for google-chrome
+2025-04-06 16:02:07,920 - ERROR - Fatal error in main loop: There is no such driver by url https://chromedriver.storage.googleapis.com/LATEST_RELEASE_134.0.6998
+2025-04-06 16:02:08,905 - INFO - HTTP Request: POST https://api.telegram.org/bot7559619950:AAGQJBhye7ALCSJ7BPjwXtEjQ_Rtk1Oh1yo/sendMessage "HTTP/1.1 200 OK"
