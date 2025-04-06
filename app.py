@@ -1,6 +1,3 @@
-from flask import Flask, render_template, jsonify
-import threading
-import asyncio
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -11,12 +8,11 @@ from selenium.webdriver.support import expected_conditions as EC
 import requests
 import time
 from telegram import Bot
-
-app = Flask(__name__)
-
-# Your original code (unchanged)
+import asyncio
+#Bot token
 TOKEN = "7559619950:AAGQJBhye7ALCSJ7BPjwXtEjQ_Rtk1Oh1yo"
 CHAT_ID = "7888816440"  # Replace with the actual chat ID
+# 2Captcha API configuration
 API_KEY = "f1a41b48a230c97e4a381ab033e1725d"
 SITE_KEY = "6Le8dMkUAAAAAEzy7WYOlWbYh0eun-xK0j5aXt6W"
 PAGE_URL = "https://evisatraveller.mfa.ir/en/request/applyrequest/"
@@ -143,75 +139,55 @@ def refresh_captcha(driver):
 
     driver.get(PAGE_URL)
     return True
+async def main():
+    bot = Bot(token=TOKEN)
+ 
+    form_data = {
+        "visa_type": "11",     # Tourist
+        "nationality": "21",   # Afghanistan
+        "passport_type": "1",  # Ordinary
+        "issuer_agent": "461"  # Embassy in Kabul
+    }
 
-# Flask routes
-@app.route('/')
-def index():
-    return render_template('index.html')
+    print("🔁 Starting periodic visa status check every 60 seconds...")
+    captcha_solution = solve_captcha()
+    if not captcha_solution:
+        return
+    driver = setup_driver()
+    driver.get("https://evisatraveller.mfa.ir/en/request/")
+    driver.add_cookie({
+                'name': '__arcsrc',
+                'value':  captcha_solution,
+                'domain': '.mfa.ir',
+                'path': '/'
+            })
 
-@app.route('/start_check', methods=['POST'])
-def start_check():
-    # Run the main function in a separate thread to avoid blocking
-    threading.Thread(target=run_main).start()
-    return jsonify({'status': 'success', 'message': 'Visa status check started'})
-
-def run_main():
-    # Create a new event loop for the thread
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    
-    # Your original main function
-    async def main():
-        bot = Bot(token=TOKEN)
-     
-        form_data = {
-            "visa_type": "11",     # Tourist
-            "nationality": "21",   # Afghanistan
-            "passport_type": "1",  # Ordinary
-            "issuer_agent": "461"  # Embassy in Kabul
-        }
-
-        print("🔁 Starting periodic visa status check every 60 seconds...")
-        captcha_solution = solve_captcha()
-        if not captcha_solution:
-            return
-        driver = setup_driver()
-        driver.get("https://evisatraveller.mfa.ir/en/request/")
-        driver.add_cookie({
-                    'name': '__arcsrc',
-                    'value':  captcha_solution,
-                    'domain': '.mfa.ir',
-                    'path': '/'
-                })
-
-        driver.get(PAGE_URL)
-        while True:
-            try:
-                success = fill_form(driver, form_data)
-                if success:
-                    submission_status = check_submission_status(driver)
-                    if submission_status is True:
-                        print("Visa list is available to fill the form")
-                        await bot.send_message(chat_id=CHAT_ID, text="✅ Visa list is available to fill the form")
-                        break  # Exit loop
-                    elif submission_status is False:
-                        await bot.send_message(chat_id=CHAT_ID, text="❌ Visa list full. Will retry in 60 seconds...")
-                        print("❌ Visa list full. Will retry in 60 seconds...")
-                    else:
-                        refresh_captcha(driver)
-                      
+    driver.get(PAGE_URL)
+    while True:
+        try:
+            success = fill_form(driver, form_data)
+            if success:
+                submission_status = check_submission_status(driver)
+                if submission_status is True:
+                    print("Visa list is available to fill the form")
+                    await bot.send_message(chat_id=CHAT_ID, text="✅ Visa list is available to fill the form")
+                    break  # Exit loop
+                elif submission_status is False:
+                    await bot.send_message(chat_id=CHAT_ID, text="❌ Visa list full. Will retry in 60 seconds...")
+                    print("❌ Visa list full. Will retry in 60 seconds...")
                 else:
                     refresh_captcha(driver)
-
-            except Exception as e:
+                  
+            else:
                 refresh_captcha(driver)
-                print(f"🔥 Unexpected error: {str(e)}")
-            finally:
-                # driver.quit()
-                await asyncio.sleep(20)  # Changed from time.sleep to asyncio.sleep
 
-    # Run the main coroutine
-    loop.run_until_complete(main())
+        except Exception as e:
+            refresh_captcha(driver)
+            print(f"🔥 Unexpected error: {str(e)}")
+        finally:
+            # driver.quit()
+            await asyncio.sleep(20)  # Changed from time.sleep to asyncio.sleep
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+if __name__ == "__main__":
+    asyncio.run(main())
